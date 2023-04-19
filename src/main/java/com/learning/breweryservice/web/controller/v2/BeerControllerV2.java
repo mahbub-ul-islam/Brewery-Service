@@ -1,7 +1,9 @@
-package com.learning.breweryservice.web.controller;
+package com.learning.breweryservice.web.controller.v2;
 
 import com.learning.breweryservice.services.IBeerService;
+import com.learning.breweryservice.services.v2.IBeerServiceV2;
 import com.learning.breweryservice.web.model.BeerDto;
+import com.learning.breweryservice.web.model.v2.BeerDtoV2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,27 +11,26 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@Deprecated
-@RequestMapping("/api/v1/beer")
+@RequestMapping("/api/v2/beer")
 @RestController
-public class BeerController {
+public class BeerControllerV2 {
 
-    private final IBeerService beerService;
+    private final IBeerServiceV2 beerService;
 
-    public BeerController(IBeerService beerService) {
+    public BeerControllerV2(IBeerServiceV2 beerService) {
         this.beerService = beerService;
     }
 
     @GetMapping({"/{beerId}"})
-    public ResponseEntity<BeerDto> getBeer(@PathVariable("beerId") UUID beerId) {
+    public ResponseEntity<BeerDtoV2> getBeer(@PathVariable("beerId") UUID beerId) {
 
         return new ResponseEntity<>(beerService.getBeerById(beerId), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity handelPost(@RequestBody BeerDto beerDto) {
+    public ResponseEntity handelPost(@RequestBody BeerDtoV2 beerDto) {
 
-        BeerDto saveDto = beerService.saveDto(beerDto);
+        BeerDtoV2 saveDto = beerService.saveDto(beerDto);
 
         HttpHeaders headers = new HttpHeaders();
 //        tot add hostname to url
@@ -39,7 +40,7 @@ public class BeerController {
     }
 
     @PutMapping({"/{beerId}"})
-    public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
+    public ResponseEntity handleUpdate(@PathVariable("beerId") UUID beerId, @RequestBody BeerDtoV2 beerDto) {
 
         beerService.updateBeer(beerId, beerDto);
 
@@ -52,4 +53,5 @@ public class BeerController {
 
         beerService.deleteBeer(beerId);
     }
+
 }
